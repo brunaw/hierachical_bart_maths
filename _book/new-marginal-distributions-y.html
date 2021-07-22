@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 4 New Marginal Distributions (y) | Mixed BART Models: maths and discussion</title>
+  <meta name="description" content="Chapter 4 New Marginal Distributions (y) | Mixed BART Models: maths and discussion" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 4 New Marginal Distributions (y) | Mixed BART Models: maths and discussion" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 4 New Marginal Distributions (y) | Mixed BART Models: maths and discussion" />
+  
+  
+  
+
+<meta name="author" content="Bruna Wundervald" />
+
+
+<meta name="date" content="2021-07-22" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="posteriors.html"/>
+<link rel="next" href="old-marginal-distributions.html"/>
+<script src="libs/header-attrs-2.9/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Mixed BART book</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Intro</a></li>
+<li class="chapter" data-level="2" data-path="model.html"><a href="model.html"><i class="fa fa-check"></i><b>2</b> Model</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="model.html"><a href="model.html#maths"><i class="fa fa-check"></i><b>2.1</b> Maths</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="posteriors.html"><a href="posteriors.html"><i class="fa fa-check"></i><b>3</b> Posteriors</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="posteriors.html"><a href="posteriors.html#posterior-for-tau"><i class="fa fa-check"></i><b>3.1</b> Posterior for <span class="math inline">\(\tau\)</span></a></li>
+<li class="chapter" data-level="3.2" data-path="posteriors.html"><a href="posteriors.html#posterior-for-mu_j"><i class="fa fa-check"></i><b>3.2</b> Posterior for <span class="math inline">\(\mu_j\)</span></a></li>
+<li class="chapter" data-level="3.3" data-path="posteriors.html"><a href="posteriors.html#posterior-for-mu"><i class="fa fa-check"></i><b>3.3</b> Posterior for <span class="math inline">\(\mu\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="new-marginal-distributions-y.html"><a href="new-marginal-distributions-y.html"><i class="fa fa-check"></i><b>4</b> New Marginal Distributions (y)</a>
+<ul>
+<li class="chapter" data-level="4.0.1" data-path="new-marginal-distributions-y.html"><a href="new-marginal-distributions-y.html#log-version-of-the-marginal"><i class="fa fa-check"></i><b>4.0.1</b> log version of the marginal:</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="old-marginal-distributions.html"><a href="old-marginal-distributions.html"><i class="fa fa-check"></i><b>5</b> (Old) Marginal Distributions</a></li>
+<li class="chapter" data-level="6" data-path="checking-posteriors-by-simulation.html"><a href="checking-posteriors-by-simulation.html"><i class="fa fa-check"></i><b>6</b> Checking posteriors by simulation</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="checking-posteriors-by-simulation.html"><a href="checking-posteriors-by-simulation.html#high-k-2.5"><i class="fa fa-check"></i><b>6.1</b> ‘High’ k: 2.5</a></li>
+<li class="chapter" data-level="6.2" data-path="checking-posteriors-by-simulation.html"><a href="checking-posteriors-by-simulation.html#small-k-0.5"><i class="fa fa-check"></i><b>6.2</b> ‘Small’ k: 0.5</a></li>
+<li class="chapter" data-level="6.3" data-path="checking-posteriors-by-simulation.html"><a href="checking-posteriors-by-simulation.html#y-k_1-tau_mu-mu_mu-alpha-beta-evaluating-parameter-grids-for-k_1-mu_mu-beta-and-alpha"><i class="fa fa-check"></i><b>6.3</b> <span class="math inline">\(y | k_1, \tau_{\mu}, \mu_{\mu}, \alpha, \beta\)</span>: Evaluating parameter grids for <span class="math inline">\(k_1\)</span>, <span class="math inline">\(\mu_{\mu}\)</span>, <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\alpha\)</span></a></li>
+<li class="chapter" data-level="6.4" data-path="checking-posteriors-by-simulation.html"><a href="checking-posteriors-by-simulation.html#code"><i class="fa fa-check"></i><b>6.4</b> Code</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="algorithm.html"><a href="algorithm.html"><i class="fa fa-check"></i><b>7</b> Algorithm</a></li>
+<li class="chapter" data-level="8" data-path="parameter-change.html"><a href="parameter-change.html"><i class="fa fa-check"></i><b>8</b> Parameter change</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/brunaw/mixed_bart" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Mixed BART Models: maths and discussion</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="new-marginal-distributions-y" class="section level1" number="4">
+<h1><span class="header-section-number">Chapter 4</span> New Marginal Distributions (y)</h1>
+<p>Suppose we have the outcome variable:
+<span class="math display">\[\mathbf{y} \sim MVN_n(\mu \mathbf{1}_n, \tau^{-1} (k_1 \mathbf{MM}^T + \mathbf{I}))\]</span></p>
+<p>with:
+<span class="math display">\[\mu \sim N(\mu_\mu, \tau_\mu^{-1})\]</span></p>
+<p>And define <span class="math inline">\(\mathbf{\Psi} = k_1 \mathbf{MM}^T + \mathbf{I}\)</span></p>
+<p>Then, as a ‘trick’ to estimate the mean and variance of <span class="math inline">\(\mathbf{y}\)</span>, we can write:</p>
+<p><span class="math display">\[\mathbf{y} = \mu \mathbf{1}_n + \left[ \tau^{-1} \Psi \right]^{1/2} \mathbf{z}\]</span></p>
+<p>where <span class="math inline">\(\mathbf{z} \sim MVN(0, \mathbf{I})\)</span> is a standard multivariate normal. Then we have:</p>
+<p><span class="math display">\[E(\mathbf{y}) = \mu_\mu \mathbf{1}_n + 0 = \mu_\mu \mathbf{1}_n \\ 
+Var(\mathbf{y}) = Var(\mu \mathbf{1}_n) + 
+Var(\left[\tau^{-1} \Psi \right]^{1/2}) = \tau_{\mu}^{-1} \mathbf{1}_n \mathbf{1}^T_n + \tau^{-1} \mathbf{\Psi}\]</span></p>
+<p>Now let <span class="math inline">\(\tau_\mu^{-1} = k_2 \tau^{-1}\)</span>, we get:</p>
+<p><span class="math display">\[\mathbf{y} \sim MVN(\mu_\mu \mathbf{1}, \tau^{-1} \left[ k_2 \mathbf{1}_n \mathbf{1}^T_n  +  \mathbf{\Psi} \right]) \equiv MVN(W_0, \tau^{-1} W_1)\]</span></p>
+<p>We now want to marginalize this over <span class="math inline">\(\tau \sim Ga(\alpha, \beta)\)</span>, by integrating out a Gamma distribution with:</p>
+<p><span class="math display">\[ Ga\Big(n/2 + \alpha, \beta + \frac{(\mathbf{y} - \mathbf{W}_0)^T \mathbf{W}_1^{-1} (\mathbf{y} - \mathbf{W}_0)}{2}\Big) \]</span></p>
+<p>…so we get:</p>
+<p><span class="math display">\[\pi(\mathbf{y} | \mu_\mu, k_1, k_2) = \int 
+(2\pi)^{-n/2}
+\tau^{n/2} | \mathbf{W}_1 |^{-1/2} \exp \left[ -\frac{\tau}{2} (\mathbf{y} - \mathbf{W}_0)^T \mathbf{W}_1^{-1} (\mathbf{y} - \mathbf{W}_0)\right] \tau^{\alpha - 1} \exp(-\beta \tau) \partial \tau\]</span></p>
+<p>This becomes:</p>
+<p><span class="math display">\[ = (2\pi)^{-n/2} | \mathbf{W}_1 |^{-1/2} \Gamma \left( \frac{n}{2} + \alpha \right) \left[ \frac{(\mathbf{y} - \mathbf{W}_0)^T \mathbf{W}_1^{-1} (\mathbf{y} - \mathbf{W}_0)}{2} + \beta\right]^{-\left(\frac{n}{2} + \alpha \right)}\]</span></p>
+<p>(For examples of the evaluation of this marginal
+distribution, see )</p>
+<div id="log-version-of-the-marginal" class="section level3" number="4.0.1">
+<h3><span class="header-section-number">4.0.1</span> log version of the marginal:</h3>
+<p>This equation in log-scale gives us:</p>
+<p><span class="math display">\[\begin{eqnarray*}
+\log(\pi(\boldsymbol{y} | k_1, k_2, \mu, \alpha, \beta)) &amp;=&amp; 
+-\frac{N}{2} \log(2\pi) 
+-\frac{1}{2} \log(|\boldsymbol{\mathbf{W}}_{1}|) + 
+\log(\Gamma(N/2 + \alpha)) \\
+&amp;-&amp; (N/2 + \alpha)\left[ \log \Big( \beta + 
+\frac{(\mathbf{y} - \mathbf{W}_{0})^T \mathbf{W}_{1}^{-1} (\mathbf{y} - \mathbf{W}_{0})}{2}\Big) \right]
+\end{eqnarray*}\]</span></p>
+<p>And the same, when written for <span class="math inline">\(j = 1,\dots, b\)</span> nodes
+of a tree, would look like:</p>
+<p><span class="math display">\[\begin{eqnarray*}
+\sum_{j = 1}^{b} \log(\pi(\boldsymbol{y_{j}} | N_j, k_1, k_2, \mu, \alpha, \beta)) &amp;=&amp; \sum_{j = 1}^{b}
+-\frac{N_j}{2} \log(2\pi) +
+-\frac{1}{2} \log(|\boldsymbol{\mathbf{W}}_{1,j}|) + 
+\log(\Gamma(N_j/2 + \alpha)) \\
+&amp;-&amp; (N_j/2 + \alpha)\left[ \log \Big(\beta + 
+\frac{(\mathbf{y}_j - \mathbf{W}_{0,j})^T \mathbf{W}_{1,j}^{-1} (\mathbf{y}_j - \mathbf{W}_{0,j})}{2} \Big) \right]
+\end{eqnarray*}\]</span></p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="posteriors.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="old-marginal-distributions.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["book2.pdf", "book2.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

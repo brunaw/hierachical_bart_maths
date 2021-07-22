@@ -1,0 +1,84 @@
+# Posteriors
+
+## Posterior for $\tau$ 
+
+- $p(\tau | \mu_1, \dots, \mu_m, y, \alpha, \beta, k_1)$
+
+\begin{equation}
+p(\tau | \mu_1, \dots, \mu_m, y, \alpha, \beta, k_1) \propto
+\tau^{\alpha - 1} exp\{ - \beta \tau \}  \times \\
+
+(\tau/k_1)^{m/2} exp \{ -\frac{\tau}{2k_1} \sum_{j = 1}^{m}
+(\mu_{j} - \mu)^2 \} \times \\
+
+\tau^{n/2} exp \{ -\frac{\tau}{2} \sum_{j = 1}^{m}
+\sum_{i = 1}^{n_j} (y_{ij} - \mu_j)^2 \} \times
+(\tau/k_2)^{1/2}
+exp\{ - \frac{ \tau}{2 k_2} \mu^2  \}  \\
+
+\propto \tau^{(n+m+1)/2  + \alpha - 1 }
+exp \{ - \tau \Big( \frac{\sum_{j = 1}^{m}
+\sum_{i = 1}^{n_j} (y_{ij} - \mu_j)^2}{2} + \beta  +
+\frac{\sum_{j = 1}^{m}(\mu_{j} - \mu)^2}{2k_1} +
+\frac{\mu^2}{2k_2}\Big) \}
+\end{equation}
+
+So  $\tau | \mu_1, \dots, \mu_m, y, \alpha, \beta, k_1, k_2  \sim \\
+\text{Gamma}((n+m+1)/2 + \alpha, 
+\Big( \frac{\sum_{j = 1}^{m}
+\sum_{i = 1}^{n_j} (y_{ij} - \mu_j)^2}{2} + \beta  +
+\frac{\sum_{j = 1}^{m}(\mu_{j} - \mu)^2}{2k_1} +
+\frac{\mu^2}{2k_2})\Big)$
+
+
+## Posterior for $\mu_j$
+
+
+\begin{equation}
+Q =    (\tau/k_1) \sum_{j=1}^{m} (\mu_j - \mu)^2 + 
+\tau \sum_{j = 1}^{m} \sum_{i = 1}^{n_j} (y_{ij} - \mu_j)^2 \\
+
+Q =    \tau [ \sum_{j = 1}^{m} n_j \mu_j^2 + \frac{\mu_j^2}{k_1} -  
+(\sum_{j = 1}^{m} \frac{2 \mu \mu_j}{k_1} + 2 \bar y_j n_j \mu_j)] \\
+
+Q \propto    \tau [ \sum_{j = 1}^{m} (n_j + \frac{1}{k_1}) \mu_j^2 -  
+2 \mu_j (\frac{\mu}{k_1} +  \bar y_j n_j )] \\
+
+Q \propto [ \sum_{j = 1}^{m} (n_j + \frac{1}{k_1})(\mu_j -  
+ \frac{\mu/k_1 +  \bar y_j n_j}{n_j + 1/k_1})^2]\\
+
+\end{equation}
+So for each $\mu_j$
+
+
+$$\mu_j | \mu, y, \tau, k_1 \sim N(\frac{\mu/k_1 +  \bar y_j n_j}{n_j + 1/k_1}, ((n_j + \frac{1}{k_1}) \tau )^{-1})$$
+
+## Posterior for $\mu$ 
+
+Similarly, for $\mu$ we have: 
+
+\begin{equation}
+Q =    \frac{\tau}{k_1} \sum_{j = 1}^{m} (\mu_j - \mu)^2 +  \frac{ \tau}{k_2} \mu^2 \\
+
+Q =    \frac{\tau}{k_1}  \sum_{j=1}^{m} (\mu_j^{2} - 2 \mu \mu_j + \mu^2) + 
+  \frac{ \tau}{k_2} \mu^2 \\
+
+
+Q \propto (\frac{\tau}{k_2} + \frac{\tau}{k_1}  m ) \mu^2 - 
+\frac{2\tau}{k_1} \sum_{j=1}^{m} \mu \mu_j \\
+
+Q \propto (\frac{\tau}{k_2} + \frac{\tau}{k_1}  m ) \mu^2 - 
+\frac{2\tau}{k_1}  \mu \bar \mu m \\
+
+
+Q \propto (\tau(\frac{m}{k_1} + \frac{1}{k_2}))(\mu - 
+\frac{(\tau/k_1) \bar \mu m}{\tau(\frac{m}{k_1} + \frac{1}{k_2})})^2 
+\end{equation}
+
+
+
+So for $\mu$ we have that the conditional distribution: 
+
+$$\mu | \mu_1, \dots, \mu_{m}, \mu_{\mu}, k_1, k_2, \tau \sim N(
+\frac{(\tau/k_1) \bar \mu m}{\tau(\frac{m}{k_1} + \frac{1}{k_2})},
+(\tau(\frac{m}{k_1} + \frac{1}{k_2}))^{-1})$$

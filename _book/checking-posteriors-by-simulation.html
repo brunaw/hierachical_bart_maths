@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 6 Checking posteriors by simulation | Mixed BART Models: maths and discussion</title>
+  <meta name="description" content="Chapter 6 Checking posteriors by simulation | Mixed BART Models: maths and discussion" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 6 Checking posteriors by simulation | Mixed BART Models: maths and discussion" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 6 Checking posteriors by simulation | Mixed BART Models: maths and discussion" />
+  
+  
+  
+
+<meta name="author" content="Bruna Wundervald" />
+
+
+<meta name="date" content="2021-07-22" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="old-marginal-distributions.html"/>
+<link rel="next" href="algorithm.html"/>
+<script src="libs/header-attrs-2.9/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Mixed BART book</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Intro</a></li>
+<li class="chapter" data-level="2" data-path="model.html"><a href="model.html"><i class="fa fa-check"></i><b>2</b> Model</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="model.html"><a href="model.html#maths"><i class="fa fa-check"></i><b>2.1</b> Maths</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="posteriors.html"><a href="posteriors.html"><i class="fa fa-check"></i><b>3</b> Posteriors</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="posteriors.html"><a href="posteriors.html#posterior-for-tau"><i class="fa fa-check"></i><b>3.1</b> Posterior for <span class="math inline">\(\tau\)</span></a></li>
+<li class="chapter" data-level="3.2" data-path="posteriors.html"><a href="posteriors.html#posterior-for-mu_j"><i class="fa fa-check"></i><b>3.2</b> Posterior for <span class="math inline">\(\mu_j\)</span></a></li>
+<li class="chapter" data-level="3.3" data-path="posteriors.html"><a href="posteriors.html#posterior-for-mu"><i class="fa fa-check"></i><b>3.3</b> Posterior for <span class="math inline">\(\mu\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="new-marginal-distributions-y.html"><a href="new-marginal-distributions-y.html"><i class="fa fa-check"></i><b>4</b> New Marginal Distributions (y)</a>
+<ul>
+<li class="chapter" data-level="4.0.1" data-path="new-marginal-distributions-y.html"><a href="new-marginal-distributions-y.html#log-version-of-the-marginal"><i class="fa fa-check"></i><b>4.0.1</b> log version of the marginal:</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="old-marginal-distributions.html"><a href="old-marginal-distributions.html"><i class="fa fa-check"></i><b>5</b> (Old) Marginal Distributions</a></li>
+<li class="chapter" data-level="6" data-path="checking-posteriors-by-simulation.html"><a href="checking-posteriors-by-simulation.html"><i class="fa fa-check"></i><b>6</b> Checking posteriors by simulation</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="checking-posteriors-by-simulation.html"><a href="checking-posteriors-by-simulation.html#high-k-2.5"><i class="fa fa-check"></i><b>6.1</b> ‘High’ k: 2.5</a></li>
+<li class="chapter" data-level="6.2" data-path="checking-posteriors-by-simulation.html"><a href="checking-posteriors-by-simulation.html#small-k-0.5"><i class="fa fa-check"></i><b>6.2</b> ‘Small’ k: 0.5</a></li>
+<li class="chapter" data-level="6.3" data-path="checking-posteriors-by-simulation.html"><a href="checking-posteriors-by-simulation.html#y-k_1-tau_mu-mu_mu-alpha-beta-evaluating-parameter-grids-for-k_1-mu_mu-beta-and-alpha"><i class="fa fa-check"></i><b>6.3</b> <span class="math inline">\(y | k_1, \tau_{\mu}, \mu_{\mu}, \alpha, \beta\)</span>: Evaluating parameter grids for <span class="math inline">\(k_1\)</span>, <span class="math inline">\(\mu_{\mu}\)</span>, <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\alpha\)</span></a></li>
+<li class="chapter" data-level="6.4" data-path="checking-posteriors-by-simulation.html"><a href="checking-posteriors-by-simulation.html#code"><i class="fa fa-check"></i><b>6.4</b> Code</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="algorithm.html"><a href="algorithm.html"><i class="fa fa-check"></i><b>7</b> Algorithm</a></li>
+<li class="chapter" data-level="8" data-path="parameter-change.html"><a href="parameter-change.html"><i class="fa fa-check"></i><b>8</b> Parameter change</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/brunaw/mixed_bart" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Mixed BART Models: maths and discussion</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="checking-posteriors-by-simulation" class="section level1" number="6">
+<h1><span class="header-section-number">Chapter 6</span> Checking posteriors by simulation</h1>
+<p>On this section, we have the results for the posterior calculations
+using the expressions found previously in this document. The
+posterior density values are calculated using simulated values, in the
+same maths structure described in the “Maths” section.</p>
+<p>In all plots, the dashed red lines represent the ‘true’ values
+for each parameter. Ideally, these values should maximize the posteriors.
+If that happens we can be more sure that our calculations are
+correct.</p>
+<p>The fixed parameters are <span class="math inline">\(\alpha = 0.5\)</span>, <span class="math inline">\(\beta = 1\)</span>, <span class="math inline">\(\mu_{\mu} = 0.5\)</span> and
+<span class="math inline">\(\tau_{\mu} = 0.5\)</span></p>
+<div id="high-k-2.5" class="section level2" number="6.1">
+<h2><span class="header-section-number">6.1</span> ‘High’ k: 2.5</h2>
+<ul>
+<li><p>This first plot is just a summary of the distribution of the simulated data, using 9 groups
+<img src="img/boxplot.png" height="20%" /></p></li>
+<li><p>The posterior for <span class="math inline">\(\tau\)</span> seem to have maximum at a value very close to
+the ‘true’ <span class="math inline">\(\tau\)</span> (used to simulated the data)</p></li>
+</ul>
+<p><img src="img/post_tau.png" height="20%" /></p>
+<ul>
+<li>For both <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\mu_j\)</span>, that doesn’t happen as we wanted, and
+the maxima are not so close to the original values</li>
+</ul>
+<p><img src="img/post_mu_j.png" height="20%" /></p>
+<table class="table table-condensed table-hover" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+Index
+</th>
+<th style="text-align:right;">
+Posterior average
+</th>
+<th style="text-align:right;">
+True mu
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-1.373
+</td>
+<td style="text-align:right;">
+-1.369
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.093
+</td>
+<td style="text-align:right;">
+0.153
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+-0.161
+</td>
+<td style="text-align:right;">
+-0.219
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+-1.242
+</td>
+<td style="text-align:right;">
+-1.236
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+3.168
+</td>
+<td style="text-align:right;">
+3.139
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+-1.301
+</td>
+<td style="text-align:right;">
+-1.264
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+1.181
+</td>
+<td style="text-align:right;">
+1.110
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+0.386
+</td>
+<td style="text-align:right;">
+0.413
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+-0.428
+</td>
+<td style="text-align:right;">
+-0.319
+</td>
+</tr>
+</tbody>
+</table>
+<p><img src="img/post_mu.png" height="20%" /></p>
+</div>
+<div id="small-k-0.5" class="section level2" number="6.2">
+<h2><span class="header-section-number">6.2</span> ‘Small’ k: 0.5</h2>
+<p><img src="img/boxplot_sm.png" height="20%" /></p>
+<p><img src="img/post_tau_ms.png" height="20%" /></p>
+<p><img src="img/post_mu_j_ms.png" height="20%" /></p>
+<table class="table table-condensed table-hover" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+Index
+</th>
+<th style="text-align:right;">
+Posterior average
+</th>
+<th style="text-align:right;">
+True mu
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-0.804
+</td>
+<td style="text-align:right;">
+-0.799
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.025
+</td>
+<td style="text-align:right;">
+0.080
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+-0.007
+</td>
+<td style="text-align:right;">
+-0.135
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+-0.726
+</td>
+<td style="text-align:right;">
+-0.722
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+1.749
+</td>
+<td style="text-align:right;">
+1.804
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+-0.758
+</td>
+<td style="text-align:right;">
+-0.738
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+0.620
+</td>
+<td style="text-align:right;">
+0.632
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+0.279
+</td>
+<td style="text-align:right;">
+0.230
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+-0.145
+</td>
+<td style="text-align:right;">
+-0.193
+</td>
+</tr>
+</tbody>
+</table>
+<p><img src="img/post_mu_ms.png" height="20%" /></p>
+</div>
+<div id="y-k_1-tau_mu-mu_mu-alpha-beta-evaluating-parameter-grids-for-k_1-mu_mu-beta-and-alpha" class="section level2" number="6.3">
+<h2><span class="header-section-number">6.3</span> <span class="math inline">\(y | k_1, \tau_{\mu}, \mu_{\mu}, \alpha, \beta\)</span>: Evaluating parameter grids for <span class="math inline">\(k_1\)</span>, <span class="math inline">\(\mu_{\mu}\)</span>, <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\alpha\)</span></h2>
+<p><img src="img/ll_prof_mu.png" height="20%" /></p>
+<p><img src="img/ll_prof_k.png" height="20%" /></p>
+<p><img src="img/ll_prof_beta.png" height="20%" /></p>
+<p><img src="img/ll_prof_alpha.png" height="20%" /></p>
+</div>
+<div id="code" class="section level2" number="6.4">
+<h2><span class="header-section-number">6.4</span> Code</h2>
+<p>Find the latest version at <code>https://github.com/brunaw/mixed_bart/blob/master/code/simulation_MB/MB_math_check.R</code></p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="old-marginal-distributions.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="algorithm.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["book2.pdf", "book2.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

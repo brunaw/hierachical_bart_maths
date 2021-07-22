@@ -1,0 +1,17 @@
+intro
+model
+maths
+posteriors
+posterior-for-tau
+posterior-for-mu_j
+posterior-for-mu
+new-marginal-distributions-y
+log-version-of-the-marginal
+old-marginal-distributions
+checking-posteriors-by-simulation
+high-k-2.5
+small-k-0.5
+y-k_1-tau_mu-mu_mu-alpha-beta-evaluating-parameter-grids-for-k_1-mu_mu-beta-and-alpha
+code
+algorithm
+parameter-change
