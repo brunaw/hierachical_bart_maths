@@ -1,7 +1,7 @@
-# Algorithm
+## Algorithm
 
 ************************************************
-**Algorithm type**:  Metropolis within GIBBS for a hierachical Bayesian tree
+**Algorithm type**:  Metropolis within GIBBS for a hierachical Bayesian (single) tree
 
 **Reason**: We have closed posteriors for most parameters, but not for the tree structure
 

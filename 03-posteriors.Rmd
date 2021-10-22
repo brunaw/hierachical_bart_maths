@@ -1,4 +1,4 @@
-# Posteriors
+## Posteriors
 
 ## Posterior for $\tau$ 
 
@@ -82,3 +82,39 @@ So for $\mu$ we have that the conditional distribution:
 $$\mu | \mu_1, \dots, \mu_{m}, \mu_{\mu}, k_1, k_2, \tau \sim N(
 \frac{(\tau/k_1) \bar \mu m}{\tau(\frac{m}{k_1} + \frac{1}{k_2})},
 (\tau(\frac{m}{k_1} + \frac{1}{k_2}))^{-1})$$
+
+
+
+## A second posterior, with $\mu_j$ marginalised out
+
+The following is what is used in the code. 
+
+Assuming 
+$$ y | \tau, k_1, k_2 \sim N(0, \tau^{-1}[(k_1 \mathbf{M}\mathbf{M}^{T} + \mathbf{I}) + k_2 \mathbf{1}\mathbf{1}^{T}])$$
+
+we can do 
+
+
+\begin{equation}
+p(\mu | y, \alpha, \beta, k_1, k_2) \propto
+\exp \{ -\frac{\tau}{2}(\mathbf{y} - \mu \mathbf{1})^{T} \Psi^{-1}
+(\mathbf{y} - \mu \mathbf{1}) \} \times \\
+\exp \{ -\frac{\tau}{2 k_2} \mu^{2} \} \\ 
+
+ \propto
+\exp \{ -\frac{\tau}{2}(\mu^{2} (\mathbf{1}^{T} \Psi^{-1} \mathbf{1}
++ 1/k_2) - 2 \mu \mathbf{1}^{T} \Psi^{-1} \mathbf{y} + \mu^2/k_2) \}
+\\
+
+\propto
+\exp \{ -\frac{\tau}{2}[(
+\mathbf{1}^{T} \Psi^{-1} \mathbf{1}+ 1/k_2)(
+\mu^2  - 
+\frac{2 \mu \mathbf{1}^{T} \Psi^{-1} \mathbf{y}}{\mathbf{1}^{T} \Psi^{-1} \mathbf{1} + 1/k_1}) \}
+\\
+\end{equation}
+
+
+$$\mu | y, \tau, k_1, k_2 \sim MVN(\frac{\mathbf{1}^{T}\Psi^{-1}\mathbf{y}}{\mathbf{1}^{T}\Psi^{-1}\mathbf{1} + k_2^{-1}}, 
+((\mathbf{1}^{T}\Psi^{-1}\mathbf{1} + k_2^{-1}) \tau )^{-1})$$
+

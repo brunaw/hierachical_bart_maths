@@ -1,4 +1,4 @@
-# New Marginal Distributions (y)
+## Marginal Distributions for y
 
 Suppose we have the outcome variable:
 $$\mathbf{y} \sim MVN_n(\mu \mathbf{1}_n, \tau^{-1} (k_1 \mathbf{MM}^T + \mathbf{I}))$$
@@ -66,7 +66,9 @@ of a tree, would look  like:
 \end{eqnarray*}
 
 
-# (Old) Marginal Distributions
+### (Old) Marginal Distributions
+
+This is only present here for the record. 
 
 $$y_{ij} \sim N(\mu_j, \tau^{-1})$$
 $$\mu_j \sim N(\mu, k\tau^{-1})$$

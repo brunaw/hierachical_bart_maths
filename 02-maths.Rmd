@@ -1,4 +1,6 @@
-# Model
+# Single tree model 
+
+## Model specification 
 
 Define the following model. Suppose we have the observation of a tree node as:
 $$y_{ij}, i = 1,\ldots,n_j, \; j = 1\ldots, m$$

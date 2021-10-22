@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 4 Parameter change | Mixed BART Models: maths and discussion</title>
-  <meta name="description" content="Chapter 4 Parameter change | Mixed BART Models: maths and discussion" />
+  <title>Chapter 5 A BART version of our hierachical trees model | Mixed BART Models: maths and discussion</title>
+  <meta name="description" content="Chapter 5 A BART version of our hierachical trees model | Mixed BART Models: maths and discussion" />
   <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 4 Parameter change | Mixed BART Models: maths and discussion" />
+  <meta property="og:title" content="Chapter 5 A BART version of our hierachical trees model | Mixed BART Models: maths and discussion" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 4 Parameter change | Mixed BART Models: maths and discussion" />
+  <meta name="twitter:title" content="Chapter 5 A BART version of our hierachical trees model | Mixed BART Models: maths and discussion" />
   
   
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="finding-a-new-conditional-for-mu-j.html"/>
-<link rel="next" href="a-bart-version-of-our-hierachical-trees-model.html"/>
+<link rel="prev" href="parameter-change.html"/>
+<link rel="next" href="references.html"/>
 <script src="libs/header-attrs-2.9/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -190,12 +190,63 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="parameter-change" class="section level1" number="4">
-<h1><span class="header-section-number">Chapter 4</span> Parameter change</h1>
-<p><a href="https://brunaw.shinyapps.io/BHM_parameters" class="uri">https://brunaw.shinyapps.io/BHM_parameters</a></p>
-<center>
-<iframe src="https://brunaw.shinyapps.io/BHM_parameters/" width="150%" height="700" frameborder="0" scrolling="yes" marginheight="0" marginwidth="0">
-</iframe>
+<div id="a-bart-version-of-our-hierachical-trees-model" class="section level1" number="5">
+<h1><span class="header-section-number">Chapter 5</span> A BART version of our hierachical trees model</h1>
+<p>We have a variable of interest for which we assume:</p>
+<p><span class="math display">\[\begin{equation}
+
+y_{ij} = \sum_{k = 1}^{m} \overbrace{\mathbb{G}}^\text{Tree look up function}(\underbrace{X_{ij}}_\text{Covariates}, \overbrace{T_{k}}^\text{Tree structure}, \overbrace{M_{k}}^\text{Terminal node parameters}) + \underbrace{\epsilon_{ij}}_\text{Noise}
+\end{equation}\]</span></p>
+<p>for observation <span class="math inline">\(i = i, \dots, n_j\)</span> in group <span class="math inline">\(j = 1, \dots, a\)</span>. We also have
+that:</p>
+<p><span class="math display">\[\begin{equation}
+\epsilon_{ij} \sim N(0, \tau^{-1}), 
+\end{equation}\]</span></p>
+<p>where <span class="math inline">\(\tau^{-1}\)</span> is the residual precision. In this setting, <span class="math inline">\(M_{k}\)</span> will
+represent the terminal node parameters + the individual group parameters for
+tree <span class="math inline">\(k\)</span>.</p>
+<p>For a single terminal node, let:</p>
+<p><span class="math display">\[\begin{equation}
+R_{ijk1} = Y_{ij}^{(1)} - \sum_{t \neq k} \mathbb{G}(X_{ij}^{(1)}, T_{t}, M_{t})
+\end{equation}\]</span></p>
+<p>which represents the <strong>partial residuals</strong> for observation i, in group j, for
+tree k in terminal node 1. Now, let</p>
+<p><span class="math display">\[\begin{equation}
+\underset{\sim}{R_j} =  \{R_{ij}, \dots, j = 1,\dots, a \}
+\end{equation}\]</span></p>
+<p>then</p>
+<p><span class="math display">\[\begin{equation}
+\underset{\sim}{R_j} \sim N(\mu_j, \tau^{-1}), \\
+\mu_j \sim N(\mu, k_1\tau^{-1}/m), \text{(m = number of trees)} \\
+\mu \sim N(0, k_2 \tau^{-1}/m)\\
+\end{equation}\]</span></p>
+<p>using the same marginalisation as for a single tree:</p>
+<p><span class="math display">\[\begin{equation}
+\underset{\sim}{R_j} \sim MVN(\mu \mathbf{1}, \tau^{-1} (k_1 M^{-1}MM^{T} + \mathbb{I})), \text{(M = group model matrix)}\\
+\text{using the same trick as before and } \Psi =  k_1 M^{-1}MM^{T} + \mathbb{I}: \\ 
+\underset{\sim}{R_j} \sim MVN(0, \tau^{-1} (\Psi + k_2 M^{-1} \mathbf{1}\mathbf{1}^{T})), 
+\end{equation}\]</span></p>
+<p>which is used yo get the marginal distribution of a new tree. The new
+posterior updates will be:</p>
+<p><span class="math display">\[\begin{equation}
+\mu | \dots \sim MVN(
+\frac{\mathbf{1}^{T} \Psi^{-1} R }{\tau \Psi^{-1} \mathbf{1} + k_2^{-1} M^{-1}},
+\tau^{-1} (\mathbf{1}^{T} \Psi^{-1} \mathbf{1} + k_2^{-1} M^{-1})), 
+\end{equation}\]</span></p>
+<p><span class="math display">\[\begin{equation}
+\mu_j | \dots \sim MVN(
+\tau^{-1} (n_j + k_1^{-1} M^{-1}))
+\end{equation}\]</span></p>
+<p>The update for <span class="math inline">\(\tau\)</span> will be a little different. Let <span class="math inline">\(\hat f_{ij}\)</span> be
+the overall prediction for observation <span class="math inline">\(R_{ij}\)</span> at the current iteration:</p>
+<p><span class="math display">\[\begin{equation}
+\tau | \dots \sim Ga(
+\frac{n + m + 1}{2} + \alpha, 
+\frac{\sum_{i, j} (y_{ij} - \hat f_{ij})^2}{2} + 
+\frac{\sum_{j, k} (\mu_{jk} - \mu_{k})^2}{2} +
+\frac{\sum_{j, k} \mu_{k}^2}{2} + \beta
+)
+\end{equation}\]</span></p>
 
 </div>
             </section>
@@ -203,8 +254,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="finding-a-new-conditional-for-mu-j.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="a-bart-version-of-our-hierachical-trees-model.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="parameter-change.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
